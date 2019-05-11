@@ -1,0 +1,322 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    
+    <!-- Charts.JS -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.min.js"></script>
+
+    <title>Stock Analyser</title>
+  </head>
+  <body>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12">
+          <nav class="navbar sticky-top navbar-dark bg-dark">
+            <a class="navbar-brand" href="#">Stock Analyser</a>
+          </nav>
+          <div class="container">
+            <h2 class="text-center display-4">
+              Uber Technologies Inc. (UBER)
+            </h2>
+            <div class="container-fluid">
+                <ul class="nav nav-pills mb-3 justify-content-center" id="pills-tab" role="tablist">
+                    <li class="nav-item">
+                      <a class="nav-link active" id="pills-summary-tab" data-toggle="pill" href="#pills-summary" role="tab" aria-controls="pills-summary" aria-selected="true">Summary</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false">Profile</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" id="pills-chart-tab" data-toggle="pill" href="#pills-chart" role="tab" aria-controls="pills-chart" aria-selected="false">Chart</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="pills-histdata-tab" data-toggle="pill" href="#pills-histdata" role="tab" aria-controls="pills-histdata" aria-selected="false">Historical Data</a>
+                      </li>
+                  </ul>
+                  <div class="tab-content" id="pills-tabContent">
+                    <div class="tab-pane fade show active" id="pills-summary" role="tabpanel" aria-labelledby="pills-summary-tab">
+                        <h3 class="display-5 text-center">Overall Signal: <b>Buy</b></h3>
+                        <table class="table table-sm table-bordered table-hover text-center">
+                          <thead>
+                            <tr>
+                              <th>Type</th>
+                              <th>Signal</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td>Technical Indicators</td>
+                              <td>Buy</td>
+                            </tr>
+                            <tr>
+                              <td>News Analysis</td>
+                              <td>Buy</td>
+                            </tr>
+                            <tr>
+                              <td>Twitter Analysis</td>
+                              <td>Strong Buy</td>
+                            </tr>
+                          </tbody>
+                          </table>
+                    </div>
+                    <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+                      <div class="row">
+                        <div class="col">
+                          <h3 class="text-center">Description</h3>
+                          <p class="test-justify">Uber Technologies, Inc. develops and supports proprietary technology applications that enable independent providers of ridesharing, and meal preparation and delivery services to transact with riders and eaters worldwide. The company operates in two segments, Core Platform and Other Bets. Its driver partners provide ridesharing services through a range of vehicles, such as cars, auto rickshaws, motorbikes, minibuses, or taxis, as well as based on the number of riders under the UberBLACK, UberX, UberPOOL, Express POOL, and Uber Bus names; and restaurant and delivery partners provide meal preparation and delivery services under the Uber Eats name. The company also offers Uber Central, a tool that enables companies to request, manage, and pay for rides for their employees, customers, or partners; and Uber Health, which allows healthcare professionals to arrange rides for patients going to and from the care destinations. In addition, it provides freight transportation services to shippers in the freight industry under the Uber Freight name; leases vehicles to third-parties that use the vehicles to provide ridesharing or eats services through the platforms; and provides access to rides through personal mobility products, including dockless e-bikes and e-scooters under the JUMP name. The company was formerly known as Ubercab, Inc. and changed its name to Uber Technologies, Inc. in February 2011. Uber Technologies, Inc. was founded in 2009 and is headquartered in San Francisco, California.</p>
+                        </div>
+                        <div class="col">
+                          <h3 class="text-center">Key Executives</h3>
+                          <table class="table table-bordered table-hover">
+                              <thead>
+                                <tr>
+                                  <th scope="col">Name</th>
+                                  <th scope="col">Title</th>
+                                  <th scope="col">Year Born</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr>
+                                  <td>Mr. Dara Khosrowshahi</td>
+                                  <td>CEO & Director</td>
+                                  <td>1970</td>
+                                </tr>
+                                <tr>
+                                  <td>Mr. Travis Kalanick	</td>
+                                  <td>Co-Founder & Director	</td>
+                                  <td>1977</td>
+                                </tr>
+                              </tbody>
+                            </table>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="tab-pane fade" id="pills-chart" role="tabpanel" aria-labelledby="pills-chart-tab">
+                        <div class="container">
+                            <canvas id="myChart" height="100px"></canvas>
+                          </div>
+                    </div>
+                    <div class="tab-pane fade show" id="pills-histdata" role="tabpanel" aria-labelledby="pills-histdata-tab">
+                        <table class="table table-bordered table-hover">
+                          <thead>
+                            <tr>
+                              <th>Date</th>
+                              <th>Open</th>
+                              <th>High</th>
+                              <th>Low</th>
+                              <th>Close</th>
+                              <th>Volume</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                              <tr>
+                                  <td>10-May-2019</td>
+                                  <td>42.00</td>
+                                  <td>45.00</td>
+                                  <td>41.06</td>
+                                  <td>41.57</td>
+                                  <td>18,62,14,400</td>
+                                </tr>
+                          </tbody>
+                          </table>
+                    </div>
+                  </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <hr>
+      <div class="row">
+        <div class="col-md-4">
+          <h2 class="text-center">
+            Recent News
+          </h2>
+          <div class="list-group">
+            <a href="#" class="list-group-item list-group-item-action">
+              <div class="d-flex w-100 justify-content-between">
+                <h5 class="mb-1">List group item heading <span class="badge badge-success">Buy</span></h5>
+                <small>3 days ago</small>
+              </div>
+              <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
+              <small>Donec id elit non mi porta.</small>
+            </a>
+            <a href="#" class="list-group-item list-group-item-action">
+              <div class="d-flex w-100 justify-content-between">
+                <h5 class="mb-1">List group item heading <span class="badge badge-success">Buy</span></h5>
+                <small class="text-muted">3 days ago</small>
+              </div>
+              <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
+              <small class="text-muted">Donec id elit non mi porta.</small>
+            </a>
+            <a href="#" class="list-group-item list-group-item-action">
+              <div class="d-flex w-100 justify-content-between">
+                <h5 class="mb-1">List group item heading <span class="badge badge-success">Buy</span></h5>
+                <small class="text-muted">3 days ago</small>
+              </div>
+              <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
+              <small class="text-muted">Donec id elit non mi porta.</small>
+            </a>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <h2 class="text-center">
+            Technical Indicators
+          </h2>
+          <div class="list-group text-center">
+              <a data-toggle="modal" data-target="#exampleModal" class="list-group-item list-group-item-action">Technical Indicator 1 <span class="badge badge-success">Buy</span>
+              </a>
+              <a data-toggle="modal" data-target="#exampleModal" class="list-group-item list-group-item-action">Technical Indicator 2 <span class="badge badge-success">Buy</span>
+              </a>
+              <a data-toggle="modal" data-target="#exampleModal" class="list-group-item list-group-item-action">Technical Indicator 3 <span class="badge badge-success">Buy</span>
+              </a>
+              <a data-toggle="modal" data-target="#exampleModal" class="list-group-item list-group-item-action">Technical Indicator 4 <span class="badge badge-success">Buy</span>
+              </a>
+              <a data-toggle="modal" data-target="#exampleModal" class="list-group-item list-group-item-action">Technical Indicator 5 <span class="badge badge-success">Buy</span>
+              </a>
+            </div>
+          
+        </div>
+        <div class="col-md-4">
+          <h2 class="text-center">
+            Recent Tweets
+          </h2>
+          <div class="list-group">
+            <a href="#" class="list-group-item list-group-item-action">
+              <div class="d-flex w-100 justify-content-between">
+                <h5 class="mb-1">List group item heading <span class="badge badge-success">Buy</span></h5>
+                <small>3 days ago</small>
+              </div>
+              <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
+              <small>Donec id elit non mi porta.</small>
+            </a>
+            <a href="#" class="list-group-item list-group-item-action">
+              <div class="d-flex w-100 justify-content-between">
+                <h5 class="mb-1">List group item heading <span class="badge badge-success">Buy</span></h5>
+                <small class="text-muted">3 days ago</small>
+              </div>
+              <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
+              <small class="text-muted">Donec id elit non mi porta.</small>
+            </a>
+            <a href="#" class="list-group-item list-group-item-action">
+              <div class="d-flex w-100 justify-content-between">
+                <h5 class="mb-1">List group item heading <span class="badge badge-success">Buy</span></h5>
+                <small class="text-muted">3 days ago</small>
+              </div>
+              <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
+              <small class="text-muted">Donec id elit non mi porta.</small>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header text-center">
+              <h5 class="modal-title" id="exampleModalLabel">Indicator Chart</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+                <canvas id="myChart2" height="100px"></canvas>
+            </div>
+          </div>
+        </div>
+    </div>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+    <script>
+        var ctx = document.getElementById('myChart').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+                datasets: [{
+                    label: '# of Votes',
+                    data: [12, 19, 3, 5, 2, 3],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+        </script>
+
+<script>
+    var ctx = document.getElementById('myChart2').getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+            datasets: [{
+                label: '# of Votes',
+                data: [12, 19, 3, 5, 2, 3],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
+    });
+    </script>
+          
+  </body>
+</html>

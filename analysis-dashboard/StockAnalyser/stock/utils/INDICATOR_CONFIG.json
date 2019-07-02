@@ -1,0 +1,102 @@
+{
+  "INDICATORS_CONFIG": {
+    "sma": {
+      "periods": [
+        5,
+        10,
+        20,
+        50,
+        100,
+        200
+      ],
+      "action": "Close"
+    },
+    "ema": {
+      "periods": [
+        5,
+        10,
+        20,
+        50,
+        100,
+        200
+      ],
+      "action": "Close"
+    },
+    "macd": {
+      "periods": [
+        {
+          "fast" : 12,
+          "slow" : 26
+        }
+      ],
+      "action": "Close",
+      "signal_speed": 9
+    },
+    "rsi": {
+      "periods": [
+        14
+      ],
+      "action": "Close"
+    },
+    "trix": {
+      "periods": [
+        14
+      ],
+      "action": "Close"
+    },
+    "stoch" : {
+      "periods" : [
+        {"k" : 14, "d" : 3}
+      ],
+      "action" : "Close|High|Low"
+    },
+    "stochrsi" : {
+      "periods" : [
+        14
+      ],
+      "action" : "RSI"
+    },
+    "cci" : {
+      "periods" : [
+        20
+      ],
+      "action" : "TP"
+    },
+    "wr" : {
+      "periods" : [
+        14
+      ],
+      "action" : "Close"
+    },
+    "atr" : {
+      "periods" : [
+        14
+      ],
+      "action" : "Close"
+    },
+    "obv" : {
+      "periods" : [
+        1
+      ],
+      "action" : "Close|Volume"
+    },
+    "cmf" : {
+      "periods" : [
+        21
+      ],
+      "action" : "Close|Volume"
+    },
+    "mfi" : {
+      "periods" : [
+        15
+      ],
+      "action" : "TP|Volume"
+    },
+    "pgo" : {
+      "periods" : [
+        14
+      ],
+      "action" : "Close"
+    }
+  }
+}

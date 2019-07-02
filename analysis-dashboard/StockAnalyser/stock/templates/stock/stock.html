@@ -1,0 +1,1208 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <!-- Charts.JS -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.min.js"></script>
+
+    <title>Stock Analyser</title>
+</head>
+<body>
+<nav class="navbar navbar-light sticky-top" style="background-color: #FFC107">
+    <a class="navbar-brand" href="./">Stock Analyser</a>
+</nav>
+<div class="container-fluid" style="padding-bottom: 20px;">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="container">
+                <h2 class="text-center display-4">
+                    {{stock.name}} ({{stock.ticker}})
+                </h2>
+                <div class="container-fluid">
+                    <ul class="nav nav-pills mb-3 justify-content-center" id="pills-tab" role="tablist">
+                        <li class="nav-item"m>
+                            <a class="nav-link active" id="pills-summary-tab" data-toggle="pill" href="#pills-summary" role="tab" aria-controls="pills-summary" aria-selected="true">Summary</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false">Profile</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="pills-chart-tab" data-toggle="pill" href="#pills-chart" role="tab" aria-controls="pills-chart" aria-selected="false">Chart</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="pills-histdata-tab" data-toggle="pill" href="#pills-histdata" role="tab" aria-controls="pills-histdata" aria-selected="false">Historical Data</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content" id="pills-tabContent">
+                        <div class="tab-pane fade show active" id="pills-summary" role="tabpanel" aria-labelledby="pills-summary-tab">
+                            <h3 class="display-5 text-center">Overall Signal:
+                                {% if signals.overall == "Buy" %}
+                                <b style="color: green;">{{signals.overall}}</b>
+                                {% else %}
+                                <b style="color: red;">{{signals.overall}}</b>
+                                {% endif %}
+                            </h3>
+                            <table class="table table-sm table-bordered table-hover text-center">
+                                <thead>
+                                <tr>
+                                    <th>Type</th>
+                                    <th>Signal</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>Technical Indicators</td>
+                                    <td>{{signals.technical_indicators}}</td>
+                                </tr>
+                                <tr>
+                                    <td>News Analysis</td>
+                                    <td>{{signals.news_analysis}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Twitter Analysis</td>
+                                    <td>{{signals.twitter_analysis}}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+                            <div class="row">
+                                <div class="col text-justify">
+                                    <h3 class="text-center">Description</h3>
+                                    <p class="test-justify">{{stock.description}}</p>
+                                    <h3 class="text-center">Website</h3>
+                                    <p><a href="{{stock.website}}" target="_blank">{{stock.website}}</a></p>
+                                </div>
+                                <div class="col">
+                                    <h3 class="text-center">Key Executives</h3>
+                                    <table class="table table-bordered table-hover">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col">Name</th>
+                                            <th scope="col">Title</th>
+                                            <th scope="col">Year Born</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for ke in key_executives %}
+                                        <tr>
+                                            <td>{{ke.name}}</td>
+                                            <td>{{ke.title}}</td>
+                                            <td>{{ke.yob}}</td>
+                                        </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="pills-chart" role="tabpanel" aria-labelledby="pills-chart-tab">
+                            <div class="container">
+                                <canvas id="closeprice-chart" height="100px"></canvas>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade show" id="pills-histdata" role="tabpanel" aria-labelledby="pills-histdata-tab">
+                            <table class="table table-bordered table-hover">
+                                <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Open</th>
+                                    <th>High</th>
+                                    <th>Low</th>
+                                    <th>Close</th>
+                                    <th>Total Traded Quantity</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for data_point in historical_data %}
+                                <tr>
+                                    <td>{{data_point.date}}</td>
+                                    <td>{{data_point.open_price}}</td>
+                                    <td>{{data_point.high_price}}</td>
+                                    <td>{{data_point.low_price}}</td>
+                                    <td>{{data_point.close_price}}</td>
+                                    <td>{{data_point.total_traded_quantity}}</td>
+                                </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-md-4">
+            <h2 class="text-center">
+                Recent News
+            </h2>
+            <div class="list-group">
+                {% for news in stock_news %}
+                <a href="#" class="list-group-item list-group-item-action">
+                    <p class="mb-1">{{news.headline}}
+                        {% if news.sentiment == "Buy" %}
+                        <span class="badge badge-success">Buy</span>
+                        {% else %}
+                        <span class="badge badge-danger">Sell</span>
+                        {% endif %}
+                    </p>
+                    <small>{{news.date}}</small>
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="col-md-4">
+            <h2 class="text-center">
+                Technical Indicators
+            </h2>
+            <div class="list-group text-center">
+                <a data-toggle="modal" data-target="#sma" class="list-group-item list-group-item-action">Moving Averages
+                    {% if signals.all_technical_indicators.sma_20_100_signal.signal == "Buy" %}
+                    <span class="badge badge-success">Buy</span>
+                    {% else %}
+                    <span class="badge badge-danger">Sell</span>
+                    {% endif %}
+                </a>
+                <a data-toggle="modal" data-target="#macd" class="list-group-item list-group-item-action">MACD(12, 26)
+                    {% if signals.all_technical_indicators.macd_signal.signal == "Buy" %}
+                    <span class="badge badge-success">Buy</span>
+                    {% else %}
+                    <span class="badge badge-danger">Sell</span>
+                    {% endif %}
+                </a>
+                <a data-toggle="modal" data-target="#trix" class="list-group-item list-group-item-action">TRIX(14)
+                    {% if signals.all_technical_indicators.trix_signal.signal == "Buy" %}
+                    <span class="badge badge-success">Buy</span>
+                    {% else %}
+                    <span class="badge badge-danger">Sell</span>
+                    {% endif %}
+                </a>
+                <a data-toggle="modal" data-target="#cci" class="list-group-item list-group-item-action">CCI(20)
+                    {% if signals.all_technical_indicators.cci_signal.signal == "Buy" %}
+                    <span class="badge badge-success">Buy</span>
+                    {% elif signals.all_technical_indicators.cci_signal.signal == "Sell"%}
+                    <span class="badge badge-danger">Sell</span>
+                    {% else %}
+                    <span class="badge badge-info">Neutral</span>
+                    {% endif %}
+                </a>
+                <a data-toggle="modal" data-target="#rsi" class="list-group-item list-group-item-action">RSI(14)
+                    {% if signals.all_technical_indicators.rsi_signal.signal == "Buy" %}
+                    <span class="badge badge-success">Buy</span>
+                    {% elif signals.all_technical_indicators.rsi_signal.signal == "Sell"%}
+                    <span class="badge badge-danger">Sell</span>
+                    {% else %}
+                    <span class="badge badge-info">Neutral</span>
+                    {% endif %}
+                </a>
+                <a data-toggle="modal" data-target="#wr" class="list-group-item list-group-item-action">William's %R
+                    {% if signals.all_technical_indicators.wr_signal.signal == "Overbought" %}
+                    <span class="badge badge-success">Overbought</span>
+                    {% elif signals.all_technical_indicators.wr_signal.signal == "Oversold"%}
+                    <span class="badge badge-danger">Oversold</span>
+                    {% else %}
+                    <span class="badge badge-info">Neutral</span>
+                    {% endif %}
+                </a>
+                <a data-toggle="modal" data-target="#stoch" class="list-group-item list-group-item-action">STOCH
+                    {% if signals.all_technical_indicators.stoch_signal.signal == "Buy" %}
+                    <span class="badge badge-success">Buy</span>
+                    {% elif signals.all_technical_indicators.stoch_signal.signal == "Sell"%}
+                    <span class="badge badge-danger">Sell</span>
+                    {% else %}
+                    <span class="badge badge-info">Neutral</span>
+                    {% endif %}
+                </a>
+                <a data-toggle="modal" data-target="#stochrsi" class="list-group-item list-group-item-action">STOCH RSI
+                    {% if signals.all_technical_indicators.stochrsi_signal.signal == "Buy" %}
+                    <span class="badge badge-success">Buy</span>
+                    {% elif signals.all_technical_indicators.stochrsi_signal.signal == "Sell"%}
+                    <span class="badge badge-danger">Sell</span>
+                    {% else %}
+                    <span class="badge badge-info">Neutral</span>
+                    {% endif %}
+                </a>
+                <a data-toggle="modal" data-target="#atr" class="list-group-item list-group-item-action">ATR
+                    <span class="badge badge-info">{{signals.all_technical_indicators.atr_signal.signal}}</span>
+                </a>
+                <a data-toggle="modal" data-target="#obv" class="list-group-item list-group-item-action">OBV
+                    {% if signals.all_technical_indicators.obv_1_signal.signal == "Buy" %}
+                    <span class="badge badge-success">Buy</span>
+                    {% elif signals.all_technical_indicators.obv_1_signal.signal == "Sell"%}
+                    <span class="badge badge-danger">Sell</span>
+                    {% else %}
+                    <span class="badge badge-info">Neutral</span>
+                    {% endif %}
+                </a>
+                <a data-toggle="modal" data-target="#cmf" class="list-group-item list-group-item-action">CMF
+                    {% if signals.all_technical_indicators.cmf_21_signal.signal == "Buy" %}
+                    <span class="badge badge-success">Buy</span>
+                    {% elif signals.all_technical_indicators.cmf_21_signal.signal == "Sell"%}
+                    <span class="badge badge-danger">Sell</span>
+                    {% else %}
+                    <span class="badge badge-info">Neutral</span>
+                    {% endif %}
+                </a>
+                <a data-toggle="modal" data-target="#mfi" class="list-group-item list-group-item-action">MFI
+                    {% if signals.all_technical_indicators.mfi_signal.signal == "Overbought" %}
+                    <span class="badge badge-success">Overbought</span>
+                    {% elif signals.all_technical_indicators.mfi_signal.signal == "Oversold"%}
+                    <span class="badge badge-danger">Oversold</span>
+                    {% else %}
+                    <span class="badge badge-info">Neutral</span>
+                    {% endif %}
+                </a>
+                <a data-toggle="modal" data-target="#pgo" class="list-group-item list-group-item-action">PGO
+                    {% if signals.all_technical_indicators.pgo_signal.signal == "Long" %}
+                    <span class="badge badge-success">Long</span>
+                    {% elif signals.all_technical_indicators.pgo_signal.signal == "Short"%}
+                    <span class="badge badge-danger">Short</span>
+                    {% else %}
+                    <span class="badge badge-info">Neutral</span>
+                    {% endif %}
+                </a>
+            </div>
+
+        </div>
+        <div class="col-md-4">
+            <h2 class="text-center">
+                Recent Tweets
+            </h2>
+            <div class="list-group">
+                {% for tweet in stock_tweets %}
+                <a href="#" class="list-group-item list-group-item-action">
+                    <p class="mb-1">{{tweet.tweet}}
+                        {% if tweet.sentiment == "Buy" %}
+                        <span class="badge badge-success">Buy</span>
+                        {% else %}
+                        <span class="badge badge-danger">Sell</span>
+                        {% endif %}
+                    </p>
+                    <small>{{tweet.date}}</small>
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="sma" tabindex="-1" role="dialog" aria-labelledby="sma" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-center">
+                <h5 class="modal-title" id="smaLabel">Moving Average</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <canvas id="ma-chart" height="250px"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="macd" tabindex="-1" role="dialog" aria-labelledby="macd" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-center">
+                <h5 class="modal-title" id="macdLabel">MACD(12, 26)</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <canvas id="macd-chart" height="250px"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="trix" tabindex="-1" role="dialog" aria-labelledby="trix" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-center">
+                <h5 class="modal-title" id="trixLabel">TRIX(14)</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <canvas id="trix-chart" height="250px"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="cci" tabindex="-1" role="dialog" aria-labelledby="cci" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-center">
+                <h5 class="modal-title" id="cciLabel">CCI(20)</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <canvas id="cci-chart" height="250px"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="rsi" tabindex="-1" role="dialog" aria-labelledby="cci" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-center">
+                <h5 class="modal-title" id="rsiLabel">RSI(14)</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <canvas id="rsi-chart" height="250px"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="wr" tabindex="-1" role="dialog" aria-labelledby="cci" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-center">
+                <h5 class="modal-title" id="wrLabel">William's %R</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <canvas id="wr-chart" height="250px"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="stoch" tabindex="-1" role="dialog" aria-labelledby="cci" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-center">
+                <h5 class="modal-title" id="stochLabel">STOCH</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <canvas id="stoch-chart" height="250px"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="stochrsi" tabindex="-1" role="dialog" aria-labelledby="cci" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-center">
+                <h5 class="modal-title" id="stochrsiLabel">STOCH RSI</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <canvas id="stochrsi-chart" height="250px"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="atr" tabindex="-1" role="dialog" aria-labelledby="atr" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-center">
+                <h5 class="modal-title" id="atrLabel">ATR</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <canvas id="atr-chart" height="250px"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="obv" tabindex="-1" role="dialog" aria-labelledby="obv" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-center">
+                <h5 class="modal-title" id="obvLabel">OBV</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <canvas id="obv-chart" height="250px"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="cmf" tabindex="-1" role="dialog" aria-labelledby="cmf" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-center">
+                <h5 class="modal-title" id="cmfLabel">CMF</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <canvas id="cmf-chart" height="250px"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="mfi" tabindex="-1" role="dialog" aria-labelledby="cmf" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-center">
+                <h5 class="modal-title" id="mfiLabel">MFI</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <canvas id="mfi-chart" height="250px"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="pgo" tabindex="-1" role="dialog" aria-labelledby="cmf" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-center">
+                <h5 class="modal-title" id="pgoLabel">PGO</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <canvas id="pgo-chart" height="250px"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+
+<script>
+    new Chart(document.getElementById("closeprice-chart"), {
+    type: 'bar',
+  data: {
+    labels: {{chart_payload.date|safe}},
+    datasets: [{
+        type: 'line',
+        data: {{chart_payload.close|safe}},
+        label: "Close Price",
+        borderColor: "rgb(51, 82, 255)",
+        fill: false,
+        radius:0,
+        yAxisID: 'A',
+      },
+      {
+        type: 'bar',
+        data: {{chart_payload.volume|safe}},
+        label: "Volume",
+        fill: true,
+        yAxisID: 'B',
+        }
+    ]
+  },
+  options: {
+    scales: {
+      yAxes: [{
+        id: 'A',
+        type: 'linear',
+        position: 'left',
+        display: true,
+      }, {
+        id: 'B',
+        type: 'linear',
+        position: 'right',
+        display: false,
+      }]
+    },
+    title: {
+      display: true,
+      text: 'Closing Price'
+    },
+    responsive : true,
+    tooltips: {
+    mode: 'index',
+    intersect: false,
+    },
+ hover: {
+    mode: 'point',
+    intersect: true,
+  },
+
+  }
+});
+</script>
+
+<script>
+    new Chart(document.getElementById("ma-chart"), {
+  type: 'line',
+  data: {
+    labels: {{chart_payload.date|safe}},
+    datasets: [
+    {
+        data: {{chart_payload.sma_close_5|safe}},
+        label: "SMA(5)",
+        borderColor: "rgb(255, 0, 0)",
+        fill: false,
+        radius:0
+      },
+      {
+        data: {{chart_payload.sma_close_10|safe}},
+        label: "SMA(10)",
+        borderColor: "rgb(255, 0, 104)",
+        fill: false,
+        radius:0
+      },
+      {
+        data: {{chart_payload.sma_close_20|safe}},
+        label: "SMA(20)",
+        borderColor: "rgb(255, 0, 224)",
+        fill: false,
+        radius:0
+      },
+      {
+        data: {{chart_payload.sma_close_100|safe}},
+        label: "SMA(100)",
+        borderColor: "rgb(151, 0, 255)",
+        fill: false,
+        radius:0
+      },
+      {
+        data: {{chart_payload.ema_close_5|safe}},
+        label: "EMA(5)",
+        borderColor: "rgb(201, 255, 0)",
+        fill: false,
+        radius:0
+      },
+      {
+        data: {{chart_payload.ema_close_10|safe}},
+        label: "EMA(10)",
+        borderColor: "rgb(85, 255, 0)",
+        fill: false,
+        radius:0
+      },
+      {
+        data: {{chart_payload.ema_close_20|safe}},
+        label: "EMA(20)",
+        borderColor: "rgb(0, 255, 151)",
+        fill: false,
+        radius:0
+      },
+      {
+        data: {{chart_payload.ema_close_100|safe}},
+        label: "EMA(100)",
+        borderColor: "rgb(0, 243, 255)",
+        fill: false,
+        radius:0
+      },
+      {
+        data: {{chart_payload.close|safe}},
+        label: "Close Price",
+        borderColor: 'rgb(51, 82, 255)',
+        fill: false,
+        radius:0
+      }
+    ]
+  },
+  options: {
+    title: {
+      display: true,
+      text: 'Moving Averages'
+    },
+    responsive : true,
+    tooltips: {
+    mode: 'index',
+    intersect: false,
+  },
+ hover: {
+    mode: 'nearest',
+    intersect: true
+  },
+  }
+});
+</script>
+
+<script>
+    const _data = {{chart_payload.macd_close_12_26|safe}};
+    new Chart(document.getElementById("macd-chart"), {
+  type: 'line',
+  data: {
+    labels: {{chart_payload.date|safe}},
+    datasets: [
+    {
+        data: {{chart_payload.macd_close_12_26|safe}},
+        label: "MACD(12,26)",
+        fill: false,
+        radius:2,
+        pointBorderColor: _data.map((value) => value < 0 ? 'red' : 'green'),
+        pointBackgroundColor: _data.map((value) => value < 0 ? 'red' : 'green'),
+      },
+      {
+        data: {{chart_payload.signal_macd_close_12_26_9|safe}},
+        label: "Signal(9)",
+        fill: false,
+        radius:0,
+        borderColor : 'purple',
+        tooltip:false,
+      },
+      {
+        data: {{chart_payload.macd_close_12_26|safe}}.map((value) => 0),
+        fill: false,
+        radius:0,
+        borderColor : 'black',
+        tooltip:false,
+      }
+    ]
+  },
+  options: {
+    title: {
+      display: true,
+      text: 'MACD'
+    },
+    responsive : true,
+    tooltips: {
+    mode: 'index',
+    intersect: false,
+        filter: function (tooltipItem) {
+            return tooltipItem.datasetIndex === 0;
+        }
+  },
+ hover: {
+    mode: 'nearest',
+    intersect: true
+  },
+  },
+});
+</script>
+
+<script>
+    new Chart(document.getElementById("trix-chart"), {
+  type: 'line',
+  data: {
+    labels: {{chart_payload.date|safe}},
+    datasets: [
+    {
+        data: {{chart_payload.trix_close_14|safe}},
+        label: "TRIX(14)",
+        fill: false,
+        radius:2,
+        pointBorderColor: {{chart_payload.trix_close_14|safe}}.map((value) => value < 0 ? 'red' : 'green'),
+        pointBackgroundColor: {{chart_payload.trix_close_14|safe}}.map((value) => value < 0 ? 'red' : 'green'),
+      },
+      {
+        data: {{chart_payload.trix_close_14|safe}}.map((value) => 0),
+        fill: false,
+        radius:0,
+        borderColor : 'black',
+        tooltip:false,
+      }
+    ]
+  },
+  options: {
+    title: {
+      display: true,
+      text: 'TRIX'
+    },
+    responsive : true,
+    tooltips: {
+    mode: 'index',
+    intersect: false,
+        filter: function (tooltipItem) {
+            return tooltipItem.datasetIndex === 0;
+        }
+  },
+ hover: {
+    mode: 'nearest',
+    intersect: true
+  },
+  },
+});
+
+</script>
+
+<script>
+    new Chart(document.getElementById("cci-chart"), {
+  type: 'line',
+  data: {
+    labels: {{chart_payload.date|safe}},
+    datasets: [
+    {
+        data: {{chart_payload.cci_tp_20|safe}},
+        label: "CCI(20)",
+        fill: false,
+        radius:0,
+        borderColor : 'black',
+      },
+      {
+        data: {{chart_payload.cci_tp_20|safe}}.map((value) => 100),
+        fill: false,
+        radius:0,
+        borderColor : 'green',
+        tooltip:false,
+      },
+      {
+        data: {{chart_payload.cci_tp_20|safe}}.map((value) => -100),
+        fill: false,
+        radius:0,
+        borderColor : 'red',
+        tooltip:false,
+      }
+    ]
+  },
+  options: {
+    title: {
+      display: true,
+      text: 'CCI'
+    },
+    responsive : true,
+    tooltips: {
+        mode: 'index',
+        intersect: false,
+        filter: function (tooltipItem) {
+            return tooltipItem.datasetIndex === 0;
+        }
+  },
+ hover: {
+    mode: 'nearest',
+    intersect: true
+  },
+  },
+});
+
+</script>
+
+<script>
+    new Chart(document.getElementById("rsi-chart"), {
+  type: 'line',
+  data: {
+    labels: {{chart_payload.date|safe}},
+    datasets: [
+    {
+        data: {{chart_payload.rsi_close_14|safe}},
+        label: "RSI(14)",
+        fill: false,
+        radius:0,
+        borderColor : 'black',
+      },
+      {
+        data: {{chart_payload.rsi_close_14|safe}}.map((value) => 70),
+        fill: false,
+        radius:0,
+        borderColor : 'green',
+        tooltip:false,
+      },
+      {
+        data: {{chart_payload.rsi_close_14|safe}}.map((value) => 30),
+        fill: false,
+        radius:0,
+        borderColor : 'red',
+        tooltip:false,
+      }
+    ]
+  },
+  options: {
+    title: {
+      display: true,
+      text: 'RSI'
+    },
+    responsive : true,
+    tooltips: {
+        mode: 'index',
+        intersect: false,
+        filter: function (tooltipItem) {
+            return tooltipItem.datasetIndex === 0;
+        }
+  },
+ hover: {
+    mode: 'nearest',
+    intersect: true
+  },
+  },
+});
+
+</script>
+
+<script>
+    new Chart(document.getElementById("wr-chart"), {
+  type: 'line',
+  data: {
+    labels: {{chart_payload.date|safe}},
+    datasets: [
+    {
+        data: {{chart_payload.wr_close_14|safe}},
+        label: "Williams %R(14)",
+        fill: false,
+        radius:0,
+        borderColor : 'black',
+      },
+      {
+        data: {{chart_payload.wr_close_14|safe}}.map((value) => -20),
+        fill: false,
+        radius:0,
+        borderColor : 'green',
+        tooltip:false,
+      },
+      {
+        data: {{chart_payload.wr_close_14|safe}}.map((value) => -80),
+        fill: false,
+        radius:0,
+        borderColor : 'red',
+        tooltip:false,
+      }
+    ]
+  },
+  options: {
+    title: {
+      display: true,
+      text: 'WR'
+    },
+    responsive : true,
+    tooltips: {
+        mode: 'index',
+        intersect: false,
+        filter: function (tooltipItem) {
+            return tooltipItem.datasetIndex === 0;
+        }
+  },
+ hover: {
+    mode: 'nearest',
+    intersect: true
+  },
+  },
+});
+
+</script>
+
+<script>
+    new Chart(document.getElementById("stoch-chart"), {
+  type: 'line',
+  data: {
+    labels: {{chart_payload.date|safe}},
+    datasets: [
+    {
+        data: {{chart_payload.stoch_14|safe}},
+        label: "STOCH(14)",
+        fill: false,
+        radius:0,
+        borderColor : 'black',
+      },
+      {
+        data: {{chart_payload.stoch_14|safe}}.map((value) => 80),
+        fill: false,
+        radius:0,
+        borderColor : 'green',
+        tooltip:false,
+      },
+      {
+        data: {{chart_payload.stoch_14|safe}}.map((value) => 20),
+        fill: false,
+        radius:0,
+        borderColor : 'red',
+        tooltip:false,
+      }
+    ]
+  },
+  options: {
+    title: {
+      display: true,
+      text: 'STOCH'
+    },
+    responsive : true,
+    tooltips: {
+        mode: 'index',
+        intersect: false,
+        filter: function (tooltipItem) {
+            return tooltipItem.datasetIndex === 0;
+        }
+  },
+ hover: {
+    mode: 'nearest',
+    intersect: true
+  },
+  },
+});
+</script>
+
+<script>
+    new Chart(document.getElementById("stochrsi-chart"), {
+  type: 'line',
+  data: {
+    labels: {{chart_payload.date|safe}},
+    datasets: [
+    {
+        data: {{chart_payload.stochrsi_rsi_14|safe}},
+        label: "STOCHRSI(14)",
+        fill: false,
+        radius:0,
+        borderColor : 'black',
+      },
+    ]
+  },
+  options: {
+    title: {
+      display: true,
+      text: 'STOCHRSI'
+    },
+    responsive : true,
+    tooltips: {
+        mode: 'index',
+        intersect: false,
+        filter: function (tooltipItem) {
+            return tooltipItem.datasetIndex === 0;
+        }
+  },
+ hover: {
+    mode: 'nearest',
+    intersect: true
+  },
+  },
+});
+</script>
+
+<script>
+    new Chart(document.getElementById("atr-chart"), {
+  type: 'line',
+  data: {
+    labels: {{chart_payload.date|safe}},
+    datasets: [
+    {
+        data: {{chart_payload.atr_close_14|safe}},
+        label: "ATR(14)",
+        fill: false,
+        radius:0,
+        borderColor : 'black',
+      },
+    ]
+  },
+  options: {
+    title: {
+      display: true,
+      text: 'ATR'
+    },
+    responsive : true,
+    tooltips: {
+        mode: 'index',
+        intersect: false,
+        filter: function (tooltipItem) {
+            return tooltipItem.datasetIndex === 0;
+        }
+  },
+ hover: {
+    mode: 'nearest',
+    intersect: true
+  },
+  },
+});
+</script>
+
+<script>
+    new Chart(document.getElementById("obv-chart"), {
+  type: 'line',
+  data: {
+    labels: {{chart_payload.date|safe}},
+    datasets: [
+    {
+        data: {{chart_payload.obv_close_volume_1|safe}},
+        label: "OBV",
+        fill: false,
+        radius:0,
+        borderColor : 'black',
+      },
+    ]
+  },
+  options: {
+    title: {
+      display: true,
+      text: 'OBV'
+    },
+    responsive : true,
+    tooltips: {
+        mode: 'index',
+        intersect: false,
+        filter: function (tooltipItem) {
+            return tooltipItem.datasetIndex === 0;
+        }
+  },
+ hover: {
+    mode: 'nearest',
+    intersect: true
+  },
+  },
+});
+</script>
+
+<script>
+    new Chart(document.getElementById("cmf-chart"), {
+  type: 'line',
+  data: {
+    labels: {{chart_payload.date|safe}},
+    datasets: [
+    {
+        data: {{chart_payload.cmf_close_volume_21|safe}},
+        label: "CMF(21)",
+        fill: false,
+        radius:0,
+        borderColor : 'black',
+      },
+      {
+        data: {{chart_payload.cmf_close_volume_21|safe}}.map((value) => 0),
+        fill: false,
+        radius:0,
+        borderColor : 'red',
+        tooltip:false,
+      },
+    ]
+  },
+  options: {
+    title: {
+      display: true,
+      text: 'CMF'
+    },
+    responsive : true,
+    tooltips: {
+        mode: 'index',
+        intersect: false,
+        filter: function (tooltipItem) {
+            return tooltipItem.datasetIndex === 0;
+        }
+  },
+ hover: {
+    mode: 'nearest',
+    intersect: true
+  },
+  },
+});
+</script>
+
+<script>
+    new Chart(document.getElementById("mfi-chart"), {
+  type: 'line',
+  data: {
+    labels: {{chart_payload.date|safe}},
+    datasets: [
+    {
+        data: {{chart_payload.mfi_tp_volume_15|safe}},
+        label: "MFI(15)",
+        fill: false,
+        radius:0,
+        borderColor : 'black',
+      },
+      {
+        data: {{chart_payload.mfi_tp_volume_15|safe}}.map((value) => 20),
+        fill: false,
+        radius:0,
+        borderColor : 'red',
+        tooltip:false,
+      },
+      {
+        data: {{chart_payload.mfi_tp_volume_15|safe}}.map((value) => 80),
+        fill: false,
+        radius:0,
+        borderColor : 'green',
+        tooltip:false,
+      }
+    ]
+  },
+  options: {
+    title: {
+      display: true,
+      text: 'MFI'
+    },
+    responsive : true,
+    tooltips: {
+        mode: 'index',
+        intersect: false,
+        filter: function (tooltipItem) {
+            return tooltipItem.datasetIndex === 0;
+        }
+  },
+ hover: {
+    mode: 'nearest',
+    intersect: true
+  },
+  },
+});
+</script>
+
+<script>
+    new Chart(document.getElementById("pgo-chart"), {
+  type: 'line',
+  data: {
+    labels: {{chart_payload.date|safe}},
+    datasets: [
+    {
+        data: {{chart_payload.pgo_close_14|safe}},
+        label: "PGO(14)",
+        fill: false,
+        radius:0,
+        borderColor : 'black',
+      },
+      {
+        data: {{chart_payload.pgo_close_14|safe}}.map((value) => -3),
+        fill: false,
+        radius:0,
+        borderColor : 'red',
+        tooltip:false,
+      },
+      {
+        data: {{chart_payload.pgo_close_14|safe}}.map((value) => 3),
+        fill: false,
+        radius:0,
+        borderColor : 'green',
+        tooltip:false,
+      }
+    ]
+  },
+  options: {
+    title: {
+      display: true,
+      text: 'PGO'
+    },
+    responsive : true,
+    tooltips: {
+        mode: 'index',
+        intersect: false,
+        filter: function (tooltipItem) {
+            return tooltipItem.datasetIndex === 0;
+        }
+  },
+ hover: {
+    mode: 'nearest',
+    intersect: true
+  },
+  },
+});
+</script>
+</body>
+</html>
